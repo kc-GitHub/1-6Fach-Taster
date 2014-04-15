@@ -1,0 +1,3 @@
+[submodule "Libraries/AskSin"]
+	path = Libraries/AskSin
+	url = git@github.com:kc-GitHub/AskSin.git
