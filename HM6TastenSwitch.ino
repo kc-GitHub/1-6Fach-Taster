@@ -32,9 +32,6 @@ s_jumptable jumptable[] PROGMEM = {												// jump table for HM communicatio
 AskSin askSin (jumptable, regMcPtr);											// declare class for handling HM communication
 Buttons buttons[7];																// declare 7 instances of the button key handler
 
-//int16_t bright;
-//int8_t dir;
-
 //- main functions -------------------------------------------------------------
 void setup() {
 	#if defined(ENABLE_DEBUG) || defined(ENABLE_COMMANDS)

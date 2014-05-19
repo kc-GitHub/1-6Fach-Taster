@@ -7,37 +7,18 @@
 //- settings of HM device for HM class -------------------------------------------------------------------------------------
 const uint8_t devParam[] PROGMEM = {
 	0x03,                                    // The firmware version, 1 byte
-//	0xF1, 0x21,                              // The model-ID    0xF1 0x21 = DIY (UWS-THPL)
-	0x00, 0xA9,                              // The model ID    alternative model (HM-WDS10-TH-O)
+	0xF1, 0x03,                              // The model ID (HB-PB-1-6)
 
-	'U','W','S','0','0','0','0','0','0','1', // The serial 10 bytes, needed for pairing   (Default for flash tool)
-//	'P','S','0','0','0','0','0','0','0','1', // Breadboard
-//	'D','H','0','T','A','0','0','0','0','1',	// TA-Bad
-//	'D','H','0','T','A','0','0','0','0','2', // TA-Flur1
-//	'D','H','0','T','A','0','0','0','0','3', // TA-Wohnzimmer
-//	'D','H','0','T','A','0','0','0','0','4', // TA-Kueche
-//	'D','H','0','T','A','0','0','0','0','5', // TA-Flur2
-//	'D','H','0','T','A','0','0','0','0','6',
-//	'D','H','0','T','A','0','0','0','0','7',
+	'H','B','0','D','e','f','a','u','l','t', // The serial 10 bytes, needed for pairing   (Default for flash tool)
 
 	0x40,                                    // Frame type 0x40 = KEY_EVENT
 	0x06, 0x00, 0x00,                        // Device Info, 3 byte, describes device, not completely clear yet. includes amount of channels
 
-	0x6F, 0xB7, 0x5D                         // The HM-ID 3 bytes, needed for pairing     (Default for flash tool)
+	0xAB, 0xCD, 0xEF,                        // The HM-ID 3 bytes, needed for pairing     (Default for flash tool)
 };
 
 // very important, must be unique. identifier for the device in the network
 static uint8_t  HMID[3];
-
-//static uint8_t  HMID[3]     = { 0x5F, 0xB7, 0x4A };
-//static uint8_t  HMID[3]     = { 0x14, 0x01, 0x01 };	// 'D','H','0','T','A','0','0','0','0','1'
-//static uint8_t  HMID[3]     = { 0x14, 0x01, 0x02 };	// 'D','H','0','T','A','0','0','0','0','2'
-//static uint8_t  HMID[3]     = { 0x14, 0x01, 0x03 };	// 'D','H','0','T','A','0','0','0','0','3'
-//static uint8_t  HMID[3]     = { 0x14, 0x01, 0x04 };	// 'D','H','0','T','A','0','0','0','0','4'
-//static uint8_t  HMID[3]     = { 0x14, 0x01, 0x05 };	// 'D','H','0','T','A','0','0','0','0','5'
-//static uint8_t  HMID[3]     = { 0x14, 0x01, 0x06 };	// 'D','H','0','T','A','0','0','0','0','6'
-//static uint8_t  HMID[3]     = { 0x14, 0x01, 0x07 };	// 'D','H','0','T','A','0','0','0','0','7'
-
 
 static uint8_t  maxRetries  = 3;											// how often a string should be send out until we get an answer
 static uint16_t timeOut     = 700;											// time out for ACK handling

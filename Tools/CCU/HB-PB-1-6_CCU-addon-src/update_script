@@ -1,0 +1,70 @@
+#!/bin/sh
+
+### Prepare filesystem
+mountPath="/mnt-root"
+mkdir -p $mountPath
+
+if ["$1" == ""]; then
+	echo "CCU1"
+	mount -t yaffs /dev/mtdblock2 $mountPath
+	lcdtool "Installing new device"
+	lcdtool -a 0x40 -t bin 00
+else
+	echo "CCU2"
+	mount -t ubifs ubi0:root $mountPath
+fi
+
+###########################
+### New device UWS-THPL ###
+###########################
+device="HB-PB-1-6"
+
+### Copy new devices Files ###
+cp -a ./firmware/rftypes/* $mountPath/firmware/rftypes/
+
+### Copy new images ###
+cp -ar ./www/config/img/devices $mountPath/www/config/img/
+
+### Edit DEVDB.tcl ###
+devdescrFile="$mountPath/www/config/devdescr/DEVDB.tcl"
+devdescrSearch="array[[:space:]]*set[[:space:]]*DEV_PATHS[[:space:]]*{"
+
+devdescrInsert=""
+devdescrInsert="$devdescrInsert HB-PB-1-6 {{50 \/config\/img\/devices\/50\/hb-pb-1-6_thumb.png} {250 \/config\/img\/devices\/250\/hb-pb-1-6.png}} "
+
+devdescrModifyed=`cat $devdescrFile | grep "$device"`
+if [ -z $devdescrModifyed ]; then
+	cp -a $devdescrFile $devdescrFile.save
+	sed -i "s/\($devdescrSearch\)/\1$devdescrInsert/g" $devdescrFile
+fi
+
+### Edit webui.js ###
+webuiFile="$mountPath/www/webui/webui.js"
+webuiSearch="DEV_HIGHLIGHT[[:space:]]*=[[:space:]]*new Array();"
+
+webuiInsert="\n"
+webuiInsert="$webuiInsert DEV_HIGHLIGHT['HB-PB-1-6'] = new Object();\n"
+webuiInsert="$webuiInsert DEV_LIST.push('HB-PB-1-6');\n"
+webuiInsert="$webuiInsert DEV_DESCRIPTION['HB-PB-1-6']='Homebrew Funk-Wandtaster 1 bis 6fach';\n"
+webuiInsert="$webuiInsert DEV_PATHS['HB-PB-1-6'] = new Object();\n"
+webuiInsert="$webuiInsert DEV_PATHS['HB-PB-1-6']['50'] = '\/config\/img\/devices\/50\/hb-pb-1-6_thumb.png';\n"
+webuiInsert="$webuiInsert DEV_PATHS['HB-PB-1-6']['250'] = '\/config\/img\/devices\/250\/hb-pb-1-6.png';\n"
+
+webuiModifyed=`cat $webuiFile | grep "$device"`
+if [ -z $webuiModifyed ]; then
+	cp -a $webuiFile $webuiFile.save
+	sed -i "s/\($webuiSearch\)/\1$webuiInsert/g" $webuiFile
+fi
+
+umount $mountPath
+if ["$1" == ""]; then
+	echo "CCU1"
+	lcdtool "Reboot...             "
+	lcdtool -a 0x40 -t bin 00
+	echo "x" > /dev/watchdog
+	reboot
+	while true ; do true ;  done
+else
+	echo "CCU2"
+	# CCU2 always reboot after Addon/Firmware Update
+fi
