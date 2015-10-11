@@ -14,11 +14,11 @@ const uint8_t devParam[] PROGMEM = {
 	0x40,                                    // Frame type 0x40 = KEY_EVENT
 	0x06, 0x00, 0x00,                        // Device Info, 3 byte, describes device, not completely clear yet. includes amount of channels
 
-	0xAB, 0xCD, 0xEF,                        // The HM-ID 3 bytes, needed for pairing     (Default for flash tool)
+	0xAB, 0xCD, 0xEF                         // The HM-ID 3 bytes, needed for pairing     (Default for flash tool)
 };
 
 // very important, must be unique. identifier for the device in the network
-static uint8_t  HMID[3];
+static uint8_t HMID[3];
 
 static uint8_t  maxRetries  = 3;											// how often a string should be send out until we get an answer
 static uint16_t timeOut     = 700;											// time out for ACK handling

@@ -20,7 +20,7 @@ void AskSin::init() {																// starts also the send/receive class for t
 }
 
 void AskSin::poll() {															// task scheduler
-	if (int0_flag)        cc1101Recv_poll();
+	if (int0_flag > 0)    cc1101Recv_poll();
 	if (recv.data[0] > 0) recv_poll();											// trace the received string and decide what to do further
 	if (send.counter > 0) send_poll();											// something to send in the buffer?
 	if (conf.act > 0) send_conf_poll();											// some config to be send out
@@ -298,7 +298,7 @@ void AskSin::printConfig() {
 //- private: //------------------------------------------------------------------------------------------------------------
 // hardware definition for interrupt handling
 void AskSin::isrGDO0event(void) {
-	int0_flag = true;
+	int0_flag = 1;
 }
 
 void AskSin::cc1101Recv_poll(void) {
@@ -308,6 +308,7 @@ void AskSin::cc1101Recv_poll(void) {
 		askSin.hm_dec(askSin.recv.data);										// decode the content
 	}
 
+	int0_flag = 0;
 	enableIRQ_GDO0();															// enable the interrupt again
 }
 
